@@ -11,7 +11,7 @@ const options: { label: string; value: TodoFilter }[] = [
 </script>
 
 <template>
-	<div class="inline-flex">
+	<div class="inline-flex gap-1">
 		<UButton
 			v-for="option in options"
 			:key="option.value"

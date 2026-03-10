@@ -31,6 +31,7 @@ defineTool({
 		v-model:open="open"
 		title="Create todo"
 		portal="#todo-panel-portal"
+		:dismissible="false"
 		:ui="{
 			overlay: '!absolute',
 			content: '!absolute',

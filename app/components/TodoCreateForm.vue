@@ -61,7 +61,7 @@ defineExpose({ setTitle, save, currentTitle: computed(() => title.value) });
 
 <template>
 	<form class="space-y-4" @submit.prevent="save">
-		<UInput id="todo-title-input" ref="titleInput" v-model="title" placeholder="What needs to be done?" autofocus />
+		<UInput id="todo-title-input" ref="titleInput" v-model="title" class="w-full" placeholder="What needs to be done?" autofocus />
 		<div class="flex justify-end gap-2">
 			<UButton label="Cancel" color="neutral" variant="outline" @click="open = false" />
 			<UButton id="save-todo" label="Save" type="submit" :disabled="!title.trim()" />
