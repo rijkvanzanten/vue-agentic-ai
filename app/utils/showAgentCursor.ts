@@ -94,7 +94,7 @@ function playClickRings(pos: Position): Promise<void> {
 			border: 2px solid var(--ui-primary);
 			pointer-events: none;
 			z-index: 9999;
-			animation: agent-cursor-ring ${CLICK_RING_DURATION}ms ${EASING} ${delay}ms forwards;
+			animation: agent-cursor-ring ${CLICK_RING_DURATION}ms ${EASING} ${delay}ms both;
 		`;
 		document.body.appendChild(ring);
 		rings.push(ring);
