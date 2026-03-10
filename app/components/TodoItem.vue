@@ -31,10 +31,7 @@ function finishEditing() {
 
 <template>
 	<div class="flex items-center gap-2 group py-1">
-		<UCheckbox
-			:model-value="todo.completed"
-			@update:model-value="emit('toggle', todo.id)"
-		/>
+		<UCheckbox :model-value="todo.completed" @update:model-value="emit('toggle', todo.id)" />
 
 		<template v-if="editing">
 			<UInput
@@ -49,7 +46,7 @@ function finishEditing() {
 		<template v-else>
 			<span
 				class="flex-1 cursor-pointer"
-				:class="{ 'line-through text-(--ui-text-muted)': todo.completed }"
+				:class="{ 'line-through text-muted': todo.completed }"
 				@dblclick="startEditing"
 			>
 				{{ todo.title }}
@@ -57,6 +54,7 @@ function finishEditing() {
 		</template>
 
 		<UButton
+			:id="'delete-todo-' + todo.id"
 			icon="i-lucide-trash-2"
 			color="neutral"
 			variant="ghost"

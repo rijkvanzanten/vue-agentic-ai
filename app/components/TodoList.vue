@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { z } from "zod";
 
-const { todos, filteredTodos, filter, toggleTodo, deleteTodo, updateTodoTitle, refresh } = useTodos();
+const { todos, filteredTodos, filter, toggleTodo, deleteTodo, updateTodoTitle, refresh } =
+	useTodos();
 const { setContext } = useUiContext();
 
 defineTool({
@@ -15,6 +16,7 @@ defineTool({
 	requiresApproval: true,
 	async execute(args) {
 		const id = args.id as string;
+		await showAgentCursor(`#delete-todo-${id}`, 800, { click: true });
 		await deleteTodo(id);
 		return { status: "success", message: `Deleted todo` };
 	},

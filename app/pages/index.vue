@@ -10,13 +10,18 @@ async function handleCreate(title: string) {
 
 <template>
 	<UDashboardGroup class="h-dvh">
-		<UDashboardPanel>
+		<UDashboardPanel :ui="{ body: 'relative' }">
 			<template #body>
 				<div class="max-w-2xl mx-auto w-full py-6 px-4">
 					<div class="flex items-center justify-between mb-6">
 						<h1 class="text-2xl font-bold">Agentic Todo</h1>
 						<div class="flex gap-2">
-							<UButton label="Add todo" icon="i-lucide-plus" @click="dialogOpen = true" />
+							<UButton
+								id="add-todo"
+								label="Add todo"
+								icon="i-lucide-plus"
+								@click="dialogOpen = true"
+							/>
 							<UButton
 								:icon="chatOpen ? 'i-lucide-panel-right-close' : 'i-lucide-message-square'"
 								color="neutral"
@@ -28,6 +33,8 @@ async function handleCreate(title: string) {
 
 					<TodoList />
 				</div>
+
+				<div id="todo-panel-portal" class="absolute inset-0 pointer-events-none [&>*]:pointer-events-auto" />
 			</template>
 		</UDashboardPanel>
 

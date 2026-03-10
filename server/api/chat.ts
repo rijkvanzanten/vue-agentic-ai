@@ -1,4 +1,11 @@
-import { streamText, convertToModelMessages, jsonSchema, stepCountIs, type UIMessage, tool } from "ai";
+import {
+	streamText,
+	convertToModelMessages,
+	jsonSchema,
+	stepCountIs,
+	type UIMessage,
+	tool,
+} from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 
@@ -10,7 +17,11 @@ interface ClientToolDefinition {
 
 export default defineLazyEventHandler(async () => {
 	return defineEventHandler(async (event) => {
-		const { messages, context, clientTools = [] } = await readBody<{
+		const {
+			messages,
+			context,
+			clientTools = [],
+		} = await readBody<{
 			messages: UIMessage[];
 			context?: Record<string, unknown>;
 			clientTools?: ClientToolDefinition[];
@@ -19,8 +30,12 @@ export default defineLazyEventHandler(async () => {
 		const systemPrompt = buildSystemPrompt(context);
 
 		const clientToolDefinitions = Object.fromEntries(
-			clientTools.map((t) =>
-				[t.name, tool({ description: t.description, inputSchema: jsonSchema(t.inputSchema) })] as const,
+			clientTools.map(
+				(t) =>
+					[
+						t.name,
+						tool({ description: t.description, inputSchema: jsonSchema(t.inputSchema) }),
+					] as const,
 			),
 		);
 
@@ -30,7 +45,8 @@ export default defineLazyEventHandler(async () => {
 			messages: await convertToModelMessages(messages),
 			tools: {
 				create_todo: tool({
-					description: "Create a new todo item. Use this when the user asks you to add, create, or make a new todo.",
+					description:
+						"Create a new todo item. Use this when the user asks you to add, create, or make a new todo.",
 					inputSchema: z.object({
 						title: z.string().describe("The title of the todo to create"),
 					}),
@@ -57,7 +73,8 @@ export default defineLazyEventHandler(async () => {
 					},
 				}),
 				list_todos: tool({
-					description: "List all current todos with their titles and completion status. Use when the user asks what's on their list.",
+					description:
+						"List all current todos with their titles and completion status. Use when the user asks what's on their list.",
 					inputSchema: z.object({}),
 					execute: async () => {
 						const todos = listTodos();
@@ -81,7 +98,7 @@ function buildSystemPrompt(context?: Record<string, unknown>): string {
 
 You have two modes of operation:
 1. **Direct action**: Use create_todo, toggle_todo, delete_todo, list_todos to directly manage todos.
-2. **UI demonstration**: Use open_create_dialog, focus_title_field, type_text, click_save to visually walk the user through the UI step by step.
+2. **UI demonstration**: Use open_create_dialog, type_text, click_save to visually walk the user through the UI step by step.
 
 When the user asks you to "show" or "demonstrate" how to do something, use UI demonstration mode.
 When the user asks you to do something directly (create, mark as done, delete), use direct action mode.
@@ -92,7 +109,7 @@ Be concise in your responses. After performing actions, briefly confirm what you
 
 	if (context && Object.keys(context).length > 0) {
 		prompt += `\n\nCurrent UI state:\n${JSON.stringify(context, null, 2)}`;
-		prompt += `\n\nUse this context to make smart decisions. For example, if the dialog is already open, skip the open_create_dialog step. Only use UI-driving tools (focus_title_field, type_text, click_save) if they appear in availableUITools — they are only available when the relevant UI component is mounted.`;
+		prompt += `\n\nUse this context to make smart decisions. For example, if the dialog is already open, skip the open_create_dialog step. Only use UI-driving tools (type_text, click_save) if they appear in availableUITools — they are only available when the relevant UI component is mounted.`;
 	}
 
 	return prompt;

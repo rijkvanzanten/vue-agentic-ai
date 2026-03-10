@@ -7,7 +7,6 @@ const emit = defineEmits<{
 	create: [title: string];
 }>();
 
-const formRef = useTemplateRef<InstanceType<typeof import("./TodoCreateForm.vue").default>>("form");
 const { setContext } = useUiContext();
 
 watch(open, (isOpen) => {
@@ -20,6 +19,7 @@ defineTool({
 		"Open the create todo dialog in the UI. Use this when demonstrating how to create a todo visually.",
 	parameters: z.object({}),
 	async execute() {
+		await showAgentCursor("#add-todo", 1500, { click: true });
 		open.value = true;
 		return { status: "success", message: "Opened create dialog" };
 	},
@@ -30,6 +30,11 @@ defineTool({
 	<UModal
 		v-model:open="open"
 		title="Create todo"
+		portal="#todo-panel-portal"
+		:ui="{
+			overlay: '!absolute',
+			content: '!absolute',
+		}"
 		:close="{
 			onClick: () => {
 				open = false;
@@ -37,7 +42,7 @@ defineTool({
 		}"
 	>
 		<template #body>
-			<TodoCreateForm ref="form" v-model:open="open" @create="emit('create', $event)" />
+			<TodoCreateForm v-model:open="open" @create="emit('create', $event)" />
 		</template>
 	</UModal>
 </template>

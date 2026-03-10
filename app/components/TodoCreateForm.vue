@@ -10,10 +10,6 @@ const emit = defineEmits<{
 const title = ref("");
 const titleInput = useTemplateRef<{ inputRef: HTMLInputElement }>("titleInput");
 
-function focusTitle() {
-	titleInput.value?.inputRef?.focus();
-}
-
 function setTitle(text: string) {
 	title.value = text;
 }
@@ -26,17 +22,6 @@ function save() {
 }
 
 defineTool({
-	name: "focus_title_field",
-	description:
-		"Focus the title input field in the create todo dialog. Use after opening the dialog when demonstrating the UI.",
-	parameters: z.object({}),
-	async execute() {
-		focusTitle();
-		return { status: "success", message: "Focused title field" };
-	},
-});
-
-defineTool({
 	name: "type_text",
 	description:
 		"Type text into the focused input field with a visible typing animation. Use when demonstrating how to enter a todo title.",
@@ -45,8 +30,10 @@ defineTool({
 	}),
 	async execute(args) {
 		const text = args.text as string;
+		await showAgentCursor("#todo-title-input", 600, { click: true });
 		setTitle("");
 		for (const char of text) {
+			await new Promise((resolve) => setTimeout(resolve, 40 + Math.random() * 80));
 			setTitle(title.value + char);
 		}
 		return { status: "success", message: `Typed: ${text}` };
@@ -59,6 +46,7 @@ defineTool({
 		"Click the save button in the create todo dialog. Use as the final step when demonstrating todo creation.",
 	parameters: z.object({}),
 	async execute() {
+		await showAgentCursor("#save-todo", 800, { click: true });
 		save();
 		return { status: "success", message: "Clicked save" };
 	},
@@ -68,15 +56,15 @@ onMounted(() => {
 	nextTick(() => titleInput.value?.inputRef?.focus());
 });
 
-defineExpose({ focusTitle, setTitle, save, currentTitle: computed(() => title.value) });
+defineExpose({ setTitle, save, currentTitle: computed(() => title.value) });
 </script>
 
 <template>
 	<form class="space-y-4" @submit.prevent="save">
-		<UInput ref="titleInput" v-model="title" placeholder="What needs to be done?" autofocus />
+		<UInput id="todo-title-input" ref="titleInput" v-model="title" placeholder="What needs to be done?" autofocus />
 		<div class="flex justify-end gap-2">
 			<UButton label="Cancel" color="neutral" variant="outline" @click="open = false" />
-			<UButton label="Save" type="submit" :disabled="!title.trim()" />
+			<UButton id="save-todo" label="Save" type="submit" :disabled="!title.trim()" />
 		</div>
 	</form>
 </template>
