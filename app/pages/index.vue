@@ -34,7 +34,10 @@ async function handleCreate(title: string) {
 					<TodoList />
 				</div>
 
-				<div id="todo-panel-portal" class="absolute inset-0 pointer-events-none [&>*]:pointer-events-auto" />
+				<div
+					id="todo-panel-portal"
+					class="absolute inset-0 pointer-events-none *:pointer-events-auto"
+				/>
 			</template>
 		</UDashboardPanel>
 
