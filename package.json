@@ -14,11 +14,18 @@
 		"typecheck": "nuxt typecheck"
 	},
 	"dependencies": {
+		"@ai-sdk/anthropic": "3.0.58",
+		"@ai-sdk/vue": "3.0.116",
 		"@iconify-json/lucide": "^1.2.96",
 		"@iconify-json/simple-icons": "^1.2.72",
 		"@nuxt/ui": "^4.5.1",
+		"@pinia/nuxt": "0.11.3",
+		"@tailwindcss/typography": "0.5.19",
+		"ai": "6.0.116",
+		"md4x": "0.0.25",
 		"nuxt": "^4.3.1",
-		"tailwindcss": "^4.2.1"
+		"tailwindcss": "^4.2.1",
+		"zod": "4.3.6"
 	},
 	"devDependencies": {
 		"oxfmt": "0.36.0",
